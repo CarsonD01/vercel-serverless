@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const Users = require('../models/Users');
 const router = express.Router();
+const { isAuthenticated } = require('../middlewares/auth.js');
 
 const signToken = (_id) => {
   return jwt.sign({ _id }, 'mySecret', {
@@ -42,11 +43,11 @@ router.post('/login', (req, res) => {
       return res.send('User or password incorrect');
     }
 
-    const { _id, password, salt } = user;
+    const { _id, password: userPassword, salt } = user;
 
     crypto.pbkdf2(password, salt, 10000, 64, 'sha1', (err, key) => {
       const encryptedPassword = key.toString('base64');
-      if (password === encryptedPassword) {
+      if (userPassword === encryptedPassword) {
         const token = signToken(_id);
         return res.send({ token });
       }
@@ -54,6 +55,10 @@ router.post('/login', (req, res) => {
       return res.send('User or password incorrect');
     });
   });
+});
+
+router.get('/me', isAuthenticated, (req, res) => {
+  res.send(req.user);
 });
 
 module.exports = router;
