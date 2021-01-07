@@ -1,5 +1,5 @@
 const express = require('express');
-const { isAuthenticated, hasRole: hasRoles } = require('../middlewares/auth');
+const { isAuthenticated, hasRoles } = require('../middlewares/auth');
 const Orders = require('../models/Orders');
 const router = express.Router();
 

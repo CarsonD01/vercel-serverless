@@ -26,8 +26,7 @@ router.post('/register', (req, res) => {
         Users.create({
           email,
           password: encryptedPassword,
-          salt,
-          newSalt,
+          salt: newSalt,
         }).then(() => {
           return res.send('User created successfully');
         });
