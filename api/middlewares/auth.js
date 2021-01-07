@@ -11,9 +11,19 @@ const isAuthenticated = (req, res, next) => {
     const { _id } = decoded;
     Users.findOne({ _id }).then((user) => {
       req.user = user;
-      next();
+      return next();
     });
   });
 };
 
-module.exports = isAuthenticated;
+const hasRoles = (roles) => (req, res, next) => {
+  if (roles.includes(req.user.role)) {
+    return next();
+  }
+  return res.sendStatus(403);
+};
+
+module.exports = {
+  isAuthenticated,
+  hasRoles,
+};

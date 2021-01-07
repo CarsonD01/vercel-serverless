@@ -1,5 +1,5 @@
 const express = require('express');
-const isAuthenticated = require('../middlewares/auth');
+const { isAuthenticated, hasRole: hasRoles } = require('../middlewares/auth');
 const Orders = require('../models/Orders');
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router.post('/', isAuthenticated, (req, res) => {
   Orders.create({ ...body, userId: _id }).then((x) => res.status(201).send(x));
 });
 
-router.put('/:id', isAuthenticated, (req, res) => {
+router.put('/:id', isAuthenticated, hasRoles(['user', 'admin']), (req, res) => {
   const id = req.params.id;
   const body = req.body;
   Orders.findOneAndUpdate(id, body).then(() => res.sendStatus(204));
