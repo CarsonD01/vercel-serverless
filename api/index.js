@@ -5,7 +5,7 @@ const cors = require('cors');
 //const orders = require('./routes/orders');
 //const users = require('./routes/users');
 //const auth = require('./routes/auth');
-const auth = require('./routes/test');
+const test = require('./routes/test');
 
 const app = express();
 app.use(express.json());
